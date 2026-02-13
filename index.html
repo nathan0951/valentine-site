@@ -223,7 +223,7 @@
 
         <!-- Please screen that shows when NO is clicked -->
         <div id="pleaseScreen" class="hidden">
-            <div class="message-text">Please 🥺</div>
+            <div class="message-text" id="pleaseText">Please 🥺</div>
             <div class="button-container" style="position: relative;">
                 <button id="yesButton2">YES! 😍</button>
                 <button id="noButton2">NO</button>
@@ -245,10 +245,23 @@
         const noButton2 = document.getElementById('noButton2');
         const buttonContainer = document.getElementById('buttonContainer');
         const pleaseScreen = document.getElementById('pleaseScreen');
+        const pleaseText = document.getElementById('pleaseText');
         const message = document.getElementById('message');
 
         // Counter to track how many times NO was clicked
         let noClickCount = 0;
+
+        // Different messages for each NO click
+        const pleaseMessages = [
+            "Are you sure? 🥺",
+            "Please? 😢",
+            "Pretty please? 😭",
+            "I'll be sad... 💔",
+            "One more chance? 😿",
+            "Don't break my heart 🥹",
+            "Still no? 😞",
+            "I'm begging you 🙏💕"
+        ];
 
         // YES button click event - shows romantic message and creates floating hearts
         yesButton.addEventListener('click', showLoveMessage);
@@ -274,6 +287,10 @@
             // Increment the NO click counter
             noClickCount++;
 
+            // Update the please message text based on click count
+            const messageIndex = Math.min(noClickCount - 1, pleaseMessages.length - 1);
+            pleaseText.textContent = pleaseMessages[messageIndex];
+
             // If clicked NO less than 5 times, show please screen with animation
             if (noClickCount < 5) {
                 // Hide both screens briefly to trigger animation
@@ -298,36 +315,38 @@
                 // Show please screen with moving NO button
                 setTimeout(() => {
                     pleaseScreen.classList.remove('hidden');
-                    // Add hover movement to NO button after 5 clicks
-                    noButton2.addEventListener('mouseenter', moveNoButton);
                 }, 50);
             }
         }
 
+        // Add hover movement to NO button2 after 5 clicks
+        noButton2.addEventListener('mouseenter', function() {
+            if (noClickCount >= 5) {
+                moveNoButton();
+            }
+        });
+
         // Function to move NO button to random position within window boundaries
         function moveNoButton() {
-            // Only move if NO was clicked 5 or more times
-            if (noClickCount >= 5) {
-                // Get button dimensions
-                const buttonWidth = noButton2.offsetWidth;
-                const buttonHeight = noButton2.offsetHeight;
+            // Get button dimensions
+            const buttonWidth = noButton2.offsetWidth;
+            const buttonHeight = noButton2.offsetHeight;
 
-                // Calculate maximum positions to keep button inside window
-                // Use window.innerWidth and window.innerHeight for viewport dimensions
-                const maxX = window.innerWidth - buttonWidth - 20; // 20px margin from edge
-                const maxY = window.innerHeight - buttonHeight - 20;
+            // Calculate maximum positions to keep button inside window
+            // Use window.innerWidth and window.innerHeight for viewport dimensions
+            const maxX = window.innerWidth - buttonWidth - 20; // 20px margin from edge
+            const maxY = window.innerHeight - buttonHeight - 20;
 
-                // Generate random positions using Math.random()
-                // Math.random() returns value between 0 and 1
-                // Multiply by max values to get random position within boundaries
-                const randomX = Math.random() * maxX;
-                const randomY = Math.random() * maxY;
+            // Generate random positions using Math.random()
+            // Math.random() returns value between 0 and 1
+            // Multiply by max values to get random position within boundaries
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
 
-                // Apply position using absolute positioning
-                noButton2.style.position = 'absolute';
-                noButton2.style.left = randomX + 'px';
-                noButton2.style.top = randomY + 'px';
-            }
+            // Apply position using absolute positioning
+            noButton2.style.position = 'absolute';
+            noButton2.style.left = randomX + 'px';
+            noButton2.style.top = randomY + 'px';
         }
 
         // Function to create multiple floating hearts animation
