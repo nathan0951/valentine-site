@@ -328,10 +328,25 @@
             }
         });
 
-        // Also move on hover to make it extra tricky
+        // Also move on hover to make it extra tricky (desktop only)
         noButton2.addEventListener('mouseenter', function() {
             if (noClickCount >= 5) {
                 moveNoButton();
+            }
+        });
+
+        // Mobile touch support - move button when touched on mobile
+        noButton2.addEventListener('touchstart', function(e) {
+            if (noClickCount >= 5) {
+                e.preventDefault(); // Prevent the click from registering
+                moveNoButton();
+            }
+        });
+
+        // Also move if user is trying to move finger to the button
+        noButton2.addEventListener('touchmove', function(e) {
+            if (noClickCount >= 5) {
+                e.preventDefault();
             }
         });
 
