@@ -88,6 +88,14 @@
             gap: 30px;
         }
 
+        /* Special container for please screen - allows button to move freely */
+        #pleaseScreen .button-container {
+            position: static;
+            overflow: visible;
+            height: auto;
+            min-height: 200px;
+        }
+
         /* Base button styling */
         button {
             padding: 20px 50px;
@@ -399,8 +407,8 @@
                 const randomX = minX + Math.random() * (maxX - minX);
                 const randomY = minY + Math.random() * (maxY - minY);
 
-                // Apply position using absolute positioning
-                noButton2.style.position = 'absolute';
+                // Apply position using fixed positioning (relative to viewport)
+                noButton2.style.position = 'fixed';
                 noButton2.style.left = randomX + 'px';
                 noButton2.style.top = randomY + 'px';
             }
@@ -442,7 +450,7 @@
         // Optional: Handle window resize to recalculate NO button boundaries
         window.addEventListener('resize', function() {
             // If NO button has been moved, ensure it stays within new boundaries
-            if (noButton2.style.position === 'absolute') {
+            if (noButton2.style.position === 'fixed' || noButton2.style.position === 'absolute') {
                 const buttonWidth = noButton2.offsetWidth;
                 const buttonHeight = noButton2.offsetHeight;
                 const currentLeft = parseInt(noButton2.style.left);
