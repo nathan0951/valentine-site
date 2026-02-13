@@ -341,16 +341,20 @@
             const buttonWidth = noButton2.offsetWidth;
             const buttonHeight = noButton2.offsetHeight;
 
-            // Calculate maximum positions to keep button inside window
+            // Calculate maximum positions to keep button inside window with good margins
             // Use window.innerWidth and window.innerHeight for viewport dimensions
-            const maxX = window.innerWidth - buttonWidth - 20; // 20px margin from edge
-            const maxY = window.innerHeight - buttonHeight - 20;
+            const margin = 50; // Bigger margin to keep button well within screen
+            const maxX = window.innerWidth - buttonWidth - margin;
+            const maxY = window.innerHeight - buttonHeight - margin;
 
-            // Generate random positions using Math.random()
+            // Keep button within safe boundaries (not too far to edges)
+            const minX = margin;
+            const minY = margin;
+
+            // Generate random positions using Math.random() within safe boundaries
             // Math.random() returns value between 0 and 1
-            // Multiply by max values to get random position within boundaries
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
+            const randomX = minX + Math.random() * (maxX - minX);
+            const randomY = minY + Math.random() * (maxY - minY);
 
             // Apply position using absolute positioning
             noButton2.style.position = 'absolute';
@@ -401,14 +405,21 @@
                 const currentTop = parseInt(noButton2.style.top);
 
                 // Check if button is outside new boundaries
-                const maxX = window.innerWidth - buttonWidth - 20;
-                const maxY = window.innerHeight - buttonHeight - 20;
+                const margin = 50;
+                const maxX = window.innerWidth - buttonWidth - margin;
+                const maxY = window.innerHeight - buttonHeight - margin;
 
                 if (currentLeft > maxX) {
                     noButton2.style.left = maxX + 'px';
                 }
                 if (currentTop > maxY) {
                     noButton2.style.top = maxY + 'px';
+                }
+                if (currentLeft < margin) {
+                    noButton2.style.left = margin + 'px';
+                }
+                if (currentTop < margin) {
+                    noButton2.style.top = margin + 'px';
                 }
             }
         });
