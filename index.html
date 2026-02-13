@@ -86,21 +86,25 @@
             box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
         }
 
-        /* NO button styling - uses position absolute for movement */
-        #noButton {
+        /* NO button styling */
+        #noButton, #noButton2 {
             background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
             color: #d63384;
-            position: absolute; /* Allows positioning anywhere on screen */
             transition: all 0.3s ease; /* Smooth movement animation */
         }
 
-        #noButton:hover {
+        #noButton:hover, #noButton2:hover {
             transform: scale(1.05);
         }
 
         /* Hidden class to hide buttons after YES is clicked */
         .hidden {
             display: none !important;
+        }
+
+        /* Please screen styling (appears when NO is clicked) */
+        #pleaseScreen {
+            animation: scaleIn 0.5s ease-in;
         }
 
         /* Romantic message container */
@@ -209,12 +213,21 @@
 </head>
 <body>
     <div class="container">
-        <h1>Can You Be My Valentine? 💖</h1>
+        <h1>Will u be my valentine my hubby? 🥰💕</h1>
 
         <!-- Button container for YES and NO buttons -->
         <div class="button-container" id="buttonContainer">
             <button id="yesButton">YES! 😍</button>
             <button id="noButton">NO</button>
+        </div>
+
+        <!-- Please screen that shows when NO is clicked -->
+        <div id="pleaseScreen" class="hidden">
+            <div class="message-text">Please 🥺</div>
+            <div class="button-container" style="position: relative;">
+                <button id="yesButton2">YES! 😍</button>
+                <button id="noButton2">NO</button>
+            </div>
         </div>
 
         <!-- Hidden message that shows after YES is clicked -->
@@ -227,48 +240,85 @@
     <script>
         // Get references to DOM elements
         const yesButton = document.getElementById('yesButton');
+        const yesButton2 = document.getElementById('yesButton2');
         const noButton = document.getElementById('noButton');
+        const noButton2 = document.getElementById('noButton2');
         const buttonContainer = document.getElementById('buttonContainer');
+        const pleaseScreen = document.getElementById('pleaseScreen');
         const message = document.getElementById('message');
 
+        // Counter to track how many times NO was clicked
+        let noClickCount = 0;
+
         // YES button click event - shows romantic message and creates floating hearts
-        yesButton.addEventListener('click', function() {
-            // Hide the buttons
+        yesButton.addEventListener('click', showLoveMessage);
+        yesButton2.addEventListener('click', showLoveMessage);
+
+        function showLoveMessage() {
+            // Hide the buttons and please screen
             buttonContainer.classList.add('hidden');
+            pleaseScreen.classList.add('hidden');
 
             // Show the romantic message
             message.classList.add('show');
 
             // Create multiple floating hearts
             createFloatingHearts();
-        });
+        }
 
-        // NO button hover event - makes button move randomly on screen
-        noButton.addEventListener('mouseenter', function() {
-            moveNoButton();
-        });
+        // NO button click events - shows "Please 🥺" screen
+        noButton.addEventListener('click', handleNoClick);
+        noButton2.addEventListener('click', handleNoClick);
+
+        function handleNoClick() {
+            // Increment the NO click counter
+            noClickCount++;
+
+            // If clicked NO less than 5 times, show please screen
+            if (noClickCount < 5) {
+                // Hide main buttons, show please screen
+                buttonContainer.classList.add('hidden');
+                pleaseScreen.classList.remove('hidden');
+
+                // Reset NO button2 position (in case it was moved)
+                noButton2.style.position = 'relative';
+                noButton2.style.left = '';
+                noButton2.style.top = '';
+            } else {
+                // After 5 clicks, make NO button move around
+                // Show please screen but make NO button2 move on hover
+                buttonContainer.classList.add('hidden');
+                pleaseScreen.classList.remove('hidden');
+
+                // Add hover movement to NO button after 5 clicks
+                noButton2.addEventListener('mouseenter', moveNoButton);
+            }
+        }
 
         // Function to move NO button to random position within window boundaries
         function moveNoButton() {
-            // Get button dimensions
-            const buttonWidth = noButton.offsetWidth;
-            const buttonHeight = noButton.offsetHeight;
+            // Only move if NO was clicked 5 or more times
+            if (noClickCount >= 5) {
+                // Get button dimensions
+                const buttonWidth = noButton2.offsetWidth;
+                const buttonHeight = noButton2.offsetHeight;
 
-            // Calculate maximum positions to keep button inside window
-            // Use window.innerWidth and window.innerHeight for viewport dimensions
-            const maxX = window.innerWidth - buttonWidth - 20; // 20px margin from edge
-            const maxY = window.innerHeight - buttonHeight - 20;
+                // Calculate maximum positions to keep button inside window
+                // Use window.innerWidth and window.innerHeight for viewport dimensions
+                const maxX = window.innerWidth - buttonWidth - 20; // 20px margin from edge
+                const maxY = window.innerHeight - buttonHeight - 20;
 
-            // Generate random positions using Math.random()
-            // Math.random() returns value between 0 and 1
-            // Multiply by max values to get random position within boundaries
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
+                // Generate random positions using Math.random()
+                // Math.random() returns value between 0 and 1
+                // Multiply by max values to get random position within boundaries
+                const randomX = Math.random() * maxX;
+                const randomY = Math.random() * maxY;
 
-            // Apply position using absolute positioning
-            noButton.style.position = 'absolute';
-            noButton.style.left = randomX + 'px';
-            noButton.style.top = randomY + 'px';
+                // Apply position using absolute positioning
+                noButton2.style.position = 'absolute';
+                noButton2.style.left = randomX + 'px';
+                noButton2.style.top = randomY + 'px';
+            }
         }
 
         // Function to create multiple floating hearts animation
@@ -307,21 +357,21 @@
         // Optional: Handle window resize to recalculate NO button boundaries
         window.addEventListener('resize', function() {
             // If NO button has been moved, ensure it stays within new boundaries
-            if (noButton.style.position === 'absolute') {
-                const buttonWidth = noButton.offsetWidth;
-                const buttonHeight = noButton.offsetHeight;
-                const currentLeft = parseInt(noButton.style.left);
-                const currentTop = parseInt(noButton.style.top);
+            if (noButton2.style.position === 'absolute') {
+                const buttonWidth = noButton2.offsetWidth;
+                const buttonHeight = noButton2.offsetHeight;
+                const currentLeft = parseInt(noButton2.style.left);
+                const currentTop = parseInt(noButton2.style.top);
 
                 // Check if button is outside new boundaries
                 const maxX = window.innerWidth - buttonWidth - 20;
                 const maxY = window.innerHeight - buttonHeight - 20;
 
                 if (currentLeft > maxX) {
-                    noButton.style.left = maxX + 'px';
+                    noButton2.style.left = maxX + 'px';
                 }
                 if (currentTop > maxY) {
-                    noButton.style.top = maxY + 'px';
+                    noButton2.style.top = maxY + 'px';
                 }
             }
         });
