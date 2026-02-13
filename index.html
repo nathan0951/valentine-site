@@ -2,8 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Be My Valentine 💖</title>
+    <style>
+        /* Lock orientation to portrait on mobile */
+        @media screen and (orientation: landscape) and (max-width: 900px) {
+            body::before {
+                content: "Please rotate your device to portrait mode 📱";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffecd2 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+                font-size: 1.5rem;
+                color: #d63384;
+                text-align: center;
+                padding: 20px;
+            }
+            body > * {
+                display: none;
+            }
+        }
+    </style>
     <style>
         /* Reset default margins and paddings */
         * {
@@ -356,25 +381,28 @@
             const buttonWidth = noButton2.offsetWidth;
             const buttonHeight = noButton2.offsetHeight;
 
-            // Calculate maximum positions to keep button inside window with good margins
-            // Use window.innerWidth and window.innerHeight for viewport dimensions
-            const margin = 50; // Margin from edges
-            const maxX = window.innerWidth - buttonWidth - margin;
-            const maxY = window.innerHeight - buttonHeight - margin;
+            // Calculate safe area for button positioning
+            // Use larger margins for better visibility, especially on mobile in portrait
+            const marginTop = 150; // Extra space for title
+            const marginSide = 30;
+            const marginBottom = 100; // Extra space at bottom
 
-            // Keep button within safe boundaries (not too far to edges)
-            const minX = margin;
-            const minY = margin;
+            const minX = marginSide;
+            const maxX = window.innerWidth - buttonWidth - marginSide;
+            const minY = marginTop;
+            const maxY = window.innerHeight - buttonHeight - marginBottom;
 
-            // Generate random positions using Math.random() within safe boundaries
-            // Math.random() returns value between 0 and 1
-            const randomX = minX + Math.random() * (maxX - minX);
-            const randomY = minY + Math.random() * (maxY - minY);
+            // Make sure we have valid ranges
+            if (maxX > minX && maxY > minY) {
+                // Generate random positions within safe boundaries
+                const randomX = minX + Math.random() * (maxX - minX);
+                const randomY = minY + Math.random() * (maxY - minY);
 
-            // Apply position using absolute positioning
-            noButton2.style.position = 'absolute';
-            noButton2.style.left = randomX + 'px';
-            noButton2.style.top = randomY + 'px';
+                // Apply position using absolute positioning
+                noButton2.style.position = 'absolute';
+                noButton2.style.left = randomX + 'px';
+                noButton2.style.top = randomY + 'px';
+            }
         }
 
         // Function to create multiple floating hearts animation
@@ -419,22 +447,28 @@
                 const currentLeft = parseInt(noButton2.style.left);
                 const currentTop = parseInt(noButton2.style.top);
 
-                // Check if button is outside new boundaries
-                const margin = 50;
-                const maxX = window.innerWidth - buttonWidth - margin;
-                const maxY = window.innerHeight - buttonHeight - margin;
+                // Use same margins as moveNoButton function
+                const marginTop = 150;
+                const marginSide = 30;
+                const marginBottom = 100;
 
+                const minX = marginSide;
+                const maxX = window.innerWidth - buttonWidth - marginSide;
+                const minY = marginTop;
+                const maxY = window.innerHeight - buttonHeight - marginBottom;
+
+                // Clamp position to stay within boundaries
                 if (currentLeft > maxX) {
                     noButton2.style.left = maxX + 'px';
                 }
                 if (currentTop > maxY) {
                     noButton2.style.top = maxY + 'px';
                 }
-                if (currentLeft < margin) {
-                    noButton2.style.left = margin + 'px';
+                if (currentLeft < minX) {
+                    noButton2.style.left = minX + 'px';
                 }
-                if (currentTop < margin) {
-                    noButton2.style.top = margin + 'px';
+                if (currentTop < minY) {
+                    noButton2.style.top = minY + 'px';
                 }
             }
         });
