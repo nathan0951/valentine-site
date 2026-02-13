@@ -358,7 +358,8 @@
 
             // Calculate maximum positions to keep button inside window with good margins
             // Use window.innerWidth and window.innerHeight for viewport dimensions
-            const margin = 50; // Bigger margin to keep button well within screen
+            // Use larger margin for mobile devices to keep button visible
+            const margin = window.innerWidth < 768 ? 100 : 80; // Bigger margin for mobile
             const maxX = window.innerWidth - buttonWidth - margin;
             const maxY = window.innerHeight - buttonHeight - margin;
 
@@ -420,7 +421,8 @@
                 const currentTop = parseInt(noButton2.style.top);
 
                 // Check if button is outside new boundaries
-                const margin = 50;
+                // Use larger margin for mobile to keep visible
+                const margin = window.innerWidth < 768 ? 100 : 80;
                 const maxX = window.innerWidth - buttonWidth - margin;
                 const maxY = window.innerHeight - buttonHeight - margin;
 
