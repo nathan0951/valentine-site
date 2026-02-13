@@ -312,13 +312,6 @@
                 buttonContainer.classList.add('hidden');
                 pleaseScreen.classList.add('hidden');
 
-                // Position button to center first before showing
-                const buttonWidth = noButton2.offsetWidth;
-                const buttonHeight = noButton2.offsetHeight;
-                noButton2.style.position = 'absolute';
-                noButton2.style.left = (window.innerWidth / 2 - buttonWidth / 2) + 'px';
-                noButton2.style.top = (window.innerHeight / 2 - buttonHeight / 2) + 'px';
-
                 // Show please screen with moving NO button
                 setTimeout(() => {
                     pleaseScreen.classList.remove('hidden');
@@ -363,33 +356,25 @@
             const buttonWidth = noButton2.offsetWidth;
             const buttonHeight = noButton2.offsetHeight;
 
-            // Get current position or start from center if not positioned yet
-            let currentX = noButton2.style.position === 'absolute' ? parseInt(noButton2.style.left) : (window.innerWidth / 2 - buttonWidth / 2);
-            let currentY = noButton2.style.position === 'absolute' ? parseInt(noButton2.style.top) : (window.innerHeight / 2 - buttonHeight / 2);
-
-            // Move button by small distance (50-150px) from current position
-            const moveDistance = 50 + Math.random() * 100; // Random distance between 50-150px
-            const angle = Math.random() * Math.PI * 2; // Random direction
-
-            // Calculate new position based on angle and distance
-            let newX = currentX + Math.cos(angle) * moveDistance;
-            let newY = currentY + Math.sin(angle) * moveDistance;
-
-            // Keep button within screen boundaries with margin
-            const margin = 30;
-            const minX = margin;
-            const minY = margin;
+            // Calculate maximum positions to keep button inside window with good margins
+            // Use window.innerWidth and window.innerHeight for viewport dimensions
+            const margin = 50; // Margin from edges
             const maxX = window.innerWidth - buttonWidth - margin;
             const maxY = window.innerHeight - buttonHeight - margin;
 
-            // Clamp position to stay within boundaries
-            newX = Math.max(minX, Math.min(newX, maxX));
-            newY = Math.max(minY, Math.min(newY, maxY));
+            // Keep button within safe boundaries (not too far to edges)
+            const minX = margin;
+            const minY = margin;
+
+            // Generate random positions using Math.random() within safe boundaries
+            // Math.random() returns value between 0 and 1
+            const randomX = minX + Math.random() * (maxX - minX);
+            const randomY = minY + Math.random() * (maxY - minY);
 
             // Apply position using absolute positioning
             noButton2.style.position = 'absolute';
-            noButton2.style.left = newX + 'px';
-            noButton2.style.top = newY + 'px';
+            noButton2.style.left = randomX + 'px';
+            noButton2.style.top = randomY + 'px';
         }
 
         // Function to create multiple floating hearts animation
@@ -435,7 +420,7 @@
                 const currentTop = parseInt(noButton2.style.top);
 
                 // Check if button is outside new boundaries
-                const margin = 30;
+                const margin = 50;
                 const maxX = window.innerWidth - buttonWidth - margin;
                 const maxY = window.innerHeight - buttonHeight - margin;
 
