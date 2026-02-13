@@ -126,6 +126,11 @@
             transition: all 0.3s ease; /* Smooth movement animation */
         }
 
+        /* When NO button2 is moving, ensure it stays on top */
+        #noButton2[style*="position: fixed"] {
+            z-index: 1000;
+        }
+
         #noButton:hover, #noButton2:hover {
             transform: scale(1.05);
         }
@@ -257,7 +262,7 @@
         <!-- Please screen that shows when NO is clicked -->
         <div id="pleaseScreen" class="hidden">
             <div class="message-text" id="pleaseText">Please 🥺</div>
-            <div class="button-container" style="position: relative;">
+            <div class="button-container">
                 <button id="yesButton2">YES! 😍</button>
                 <button id="noButton2">NO</button>
             </div>
@@ -411,6 +416,9 @@
                 noButton2.style.position = 'fixed';
                 noButton2.style.left = randomX + 'px';
                 noButton2.style.top = randomY + 'px';
+                noButton2.style.zIndex = '1000'; // Ensure button stays on top
+                noButton2.style.display = 'inline-block'; // Ensure button is displayed
+                noButton2.style.visibility = 'visible'; // Ensure button is visible
             }
         }
 
