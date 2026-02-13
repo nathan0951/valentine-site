@@ -147,7 +147,7 @@
         .heart {
             position: absolute;
             font-size: 2rem;
-            color: #ff1744;
+            color: #4A90E2; /* Blue color for hearts */
             animation: float 4s ease-in-out infinite;
             opacity: 0;
         }
@@ -312,6 +312,13 @@
                 buttonContainer.classList.add('hidden');
                 pleaseScreen.classList.add('hidden');
 
+                // Position button to center first before showing
+                const buttonWidth = noButton2.offsetWidth;
+                const buttonHeight = noButton2.offsetHeight;
+                noButton2.style.position = 'absolute';
+                noButton2.style.left = (window.innerWidth / 2 - buttonWidth / 2) + 'px';
+                noButton2.style.top = (window.innerHeight / 2 - buttonHeight / 2) + 'px';
+
                 // Show please screen with moving NO button
                 setTimeout(() => {
                     pleaseScreen.classList.remove('hidden');
@@ -399,7 +406,7 @@
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart');
-            heart.innerHTML = '❤️';
+            heart.innerHTML = '💙'; // Blue heart emoji
 
             // Position heart randomly across the width of screen
             const randomX = Math.random() * window.innerWidth;
