@@ -382,10 +382,11 @@
             const buttonHeight = noButton2.offsetHeight;
 
             // Calculate safe area for button positioning
-            // Use larger margins for better visibility, especially on mobile in portrait
-            const marginTop = 150; // Extra space for title
-            const marginSide = 30;
-            const marginBottom = 100; // Extra space at bottom
+            // Use different margins for mobile vs desktop
+            const isMobile = window.innerWidth < 768;
+            const marginTop = isMobile ? 150 : 100; // Extra space for title
+            const marginSide = isMobile ? 30 : 80; // More margin on desktop
+            const marginBottom = isMobile ? 100 : 80; // Extra space at bottom
 
             const minX = marginSide;
             const maxX = window.innerWidth - buttonWidth - marginSide;
@@ -447,10 +448,11 @@
                 const currentLeft = parseInt(noButton2.style.left);
                 const currentTop = parseInt(noButton2.style.top);
 
-                // Use same margins as moveNoButton function
-                const marginTop = 150;
-                const marginSide = 30;
-                const marginBottom = 100;
+                // Use same margins as moveNoButton function with mobile detection
+                const isMobile = window.innerWidth < 768;
+                const marginTop = isMobile ? 150 : 100;
+                const marginSide = isMobile ? 30 : 80;
+                const marginBottom = isMobile ? 100 : 80;
 
                 const minX = marginSide;
                 const maxX = window.innerWidth - buttonWidth - marginSide;
