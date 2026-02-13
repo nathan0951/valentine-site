@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine 💖</title>
+    <style>
+        /* Reset default margins and paddings */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling with pink gradient background */
+        body {
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffecd2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Main container for centering content */
+        .container {
+            text-align: center;
+            padding: 20px;
+            z-index: 10;
+        }
+
+        /* Title styling */
+        h1 {
+            font-size: 3rem;
+            color: #d63384;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in;
+        }
+
+        /* Fade-in animation for title */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Button container - uses position relative for NO button positioning */
+        .button-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+        }
+
+        /* Base button styling */
+        button {
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* YES button styling */
+        #yesButton {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        #yesButton:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        /* NO button styling - uses position absolute for movement */
+        #noButton {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #d63384;
+            position: absolute; /* Allows positioning anywhere on screen */
+            transition: all 0.3s ease; /* Smooth movement animation */
+        }
+
+        #noButton:hover {
+            transform: scale(1.05);
+        }
+
+        /* Hidden class to hide buttons after YES is clicked */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Romantic message container */
+        #message {
+            display: none;
+            animation: scaleIn 0.5s ease-in;
+        }
+
+        #message.show {
+            display: block;
+        }
+
+        /* Scale-in animation for message */
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Message text styling */
+        .message-text {
+            font-size: 2.5rem;
+            color: #d63384;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .sub-message {
+            font-size: 1.2rem;
+            color: #c2185b;
+            margin-top: 1rem;
+        }
+
+        /* Floating hearts animation */
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            color: #ff1744;
+            animation: float 4s ease-in-out infinite;
+            opacity: 0;
+        }
+
+        /* Floating animation for hearts */
+        @keyframes float {
+            0% {
+                opacity: 0;
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Responsive design for mobile devices */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            button {
+                padding: 15px 35px;
+                font-size: 1.2rem;
+            }
+
+            .button-container {
+                height: 150px;
+                gap: 20px;
+            }
+
+            .message-text {
+                font-size: 1.8rem;
+            }
+
+            .sub-message {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            button {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+
+            .button-container {
+                height: 120px;
+                gap: 15px;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Can You Be My Valentine? 💖</h1>
+
+        <!-- Button container for YES and NO buttons -->
+        <div class="button-container" id="buttonContainer">
+            <button id="yesButton">YES! 😍</button>
+            <button id="noButton">NO</button>
+        </div>
+
+        <!-- Hidden message that shows after YES is clicked -->
+        <div id="message">
+            <div class="message-text">Yay! You made me the happiest! 💕</div>
+            <div class="sub-message">I can't wait to spend Valentine's Day with you! 🌹</div>
+        </div>
+    </div>
+
+    <script>
+        // Get references to DOM elements
+        const yesButton = document.getElementById('yesButton');
+        const noButton = document.getElementById('noButton');
+        const buttonContainer = document.getElementById('buttonContainer');
+        const message = document.getElementById('message');
+
+        // YES button click event - shows romantic message and creates floating hearts
+        yesButton.addEventListener('click', function() {
+            // Hide the buttons
+            buttonContainer.classList.add('hidden');
+
+            // Show the romantic message
+            message.classList.add('show');
+
+            // Create multiple floating hearts
+            createFloatingHearts();
+        });
+
+        // NO button hover event - makes button move randomly on screen
+        noButton.addEventListener('mouseenter', function() {
+            moveNoButton();
+        });
+
+        // Function to move NO button to random position within window boundaries
+        function moveNoButton() {
+            // Get button dimensions
+            const buttonWidth = noButton.offsetWidth;
+            const buttonHeight = noButton.offsetHeight;
+
+            // Calculate maximum positions to keep button inside window
+            // Use window.innerWidth and window.innerHeight for viewport dimensions
+            const maxX = window.innerWidth - buttonWidth - 20; // 20px margin from edge
+            const maxY = window.innerHeight - buttonHeight - 20;
+
+            // Generate random positions using Math.random()
+            // Math.random() returns value between 0 and 1
+            // Multiply by max values to get random position within boundaries
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+
+            // Apply position using absolute positioning
+            noButton.style.position = 'absolute';
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+        }
+
+        // Function to create multiple floating hearts animation
+        function createFloatingHearts() {
+            // Create 20 hearts at random intervals
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createHeart();
+                }, i * 200); // Stagger heart creation by 200ms
+            }
+        }
+
+        // Function to create a single floating heart
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+
+            // Position heart randomly across the width of screen
+            const randomX = Math.random() * window.innerWidth;
+            heart.style.left = randomX + 'px';
+            heart.style.bottom = '0';
+
+            // Add random animation delay for variety
+            heart.style.animationDelay = Math.random() * 2 + 's';
+
+            // Add heart to body
+            document.body.appendChild(heart);
+
+            // Remove heart from DOM after animation completes (4 seconds)
+            setTimeout(() => {
+                heart.remove();
+            }, 4000);
+        }
+
+        // Optional: Handle window resize to recalculate NO button boundaries
+        window.addEventListener('resize', function() {
+            // If NO button has been moved, ensure it stays within new boundaries
+            if (noButton.style.position === 'absolute') {
+                const buttonWidth = noButton.offsetWidth;
+                const buttonHeight = noButton.offsetHeight;
+                const currentLeft = parseInt(noButton.style.left);
+                const currentTop = parseInt(noButton.style.top);
+
+                // Check if button is outside new boundaries
+                const maxX = window.innerWidth - buttonWidth - 20;
+                const maxY = window.innerHeight - buttonHeight - 20;
+
+                if (currentLeft > maxX) {
+                    noButton.style.left = maxX + 'px';
+                }
+                if (currentTop > maxY) {
+                    noButton.style.top = maxY + 'px';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
