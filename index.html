@@ -274,24 +274,33 @@
             // Increment the NO click counter
             noClickCount++;
 
-            // If clicked NO less than 5 times, show please screen
+            // If clicked NO less than 5 times, show please screen with animation
             if (noClickCount < 5) {
-                // Hide main buttons, show please screen
+                // Hide both screens briefly to trigger animation
                 buttonContainer.classList.add('hidden');
-                pleaseScreen.classList.remove('hidden');
+                pleaseScreen.classList.add('hidden');
 
                 // Reset NO button2 position (in case it was moved)
                 noButton2.style.position = 'relative';
                 noButton2.style.left = '';
                 noButton2.style.top = '';
+
+                // Show please screen after brief delay for animation effect
+                setTimeout(() => {
+                    pleaseScreen.classList.remove('hidden');
+                }, 50);
             } else {
                 // After 5 clicks, make NO button move around
-                // Show please screen but make NO button2 move on hover
+                // Hide both screens briefly
                 buttonContainer.classList.add('hidden');
-                pleaseScreen.classList.remove('hidden');
+                pleaseScreen.classList.add('hidden');
 
-                // Add hover movement to NO button after 5 clicks
-                noButton2.addEventListener('mouseenter', moveNoButton);
+                // Show please screen with moving NO button
+                setTimeout(() => {
+                    pleaseScreen.classList.remove('hidden');
+                    // Add hover movement to NO button after 5 clicks
+                    noButton2.addEventListener('mouseenter', moveNoButton);
+                }, 50);
             }
         }
 
