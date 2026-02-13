@@ -319,7 +319,16 @@
             }
         }
 
-        // Add hover movement to NO button2 after 5 clicks
+        // Add click/hover movement to NO button2 after 5 clicks
+        // Move on mousedown (when user tries to click) instead of on actual click
+        noButton2.addEventListener('mousedown', function(e) {
+            if (noClickCount >= 5) {
+                e.preventDefault(); // Prevent the click from registering
+                moveNoButton();
+            }
+        });
+
+        // Also move on hover to make it extra tricky
         noButton2.addEventListener('mouseenter', function() {
             if (noClickCount >= 5) {
                 moveNoButton();
